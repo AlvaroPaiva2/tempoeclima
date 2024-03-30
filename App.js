@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MainCard from './components/MainCard';
 import InfoCard from './components/InfoCard';
-
+import * as Location from 'expo-location';
 
 export default function App() {
 
@@ -18,7 +18,7 @@ export default function App() {
   const [umidity, setUmidity] = useState('80')
   const [tempMin, setTempMin] = useState('21')
   const [tempMax, setTempMax] = useState('31')
-
+  const [locationCoords, setLocationCoords] = useState([])
 
   const styles = StyleSheet.create({
     container: {
@@ -64,36 +64,43 @@ export default function App() {
       flexWrap: 'wrap',
     },
     themeButton: {
-      alignItems: 'center',
-      margin: '10',
-      marginLeft: '300',
+      margin: 10,
+      marginLeft: 300,
       justifyContent: 'center',
       width: 50,
       height: 50,
       borderRadius: 25,
     },
     squareButton: {
-      color: darkTheme ? '#f2f2f2' : '#8f8f8f',
-      alignItems: 'center',
-      marginRight: 20,
+      backgroundColor: darkTheme ? '#f2f2f2' : '#8f8f8f',
       justifyContent: 'center',
+      marginRight: 20,
       width: 50,
       height: 25,
       borderRadius: 20,
     },
     circleButton: {
+      backgroundColor: darkTheme ? '#232634' : '#f2f2f2',
       alignSelf: darkTheme ? 'flex-end' : 'flex-start',
-      color: darkTheme ? '#232634' : '#f2f2f2',
-      alignItems: 'center',
-      marginRight: 20,
-      justifyContent: 'center',
-      width: 50,
-      height: 25,
-      borderRadius: 20,
+      margin: 5,
+      width: 20,
+      height: 20,
+      borderRadius: 50,
     },
 
   }
   );
+
+  async function getLocation(){
+    let { status } = await Location.requestForegroundPermissionsAsync()
+      if (status !== 'granted'){
+        setErrorMsg('Sem permissão')
+      }else{
+        let location = await Location.getCurrentPositionAsync({})
+        await setLocationCoords(location.coords)
+      }
+  };
+
   return (
     <View style={styles.container}>
 
@@ -125,11 +132,13 @@ export default function App() {
           <InfoCard title={'Temp. Max'} value={tempMax + '°'}></InfoCard>
         </View>
       </View>
+      
       <View style={styles.themeButton}>
         <View style={styles.squareButton}>
-          <TouchableOpacity style={styles.circleButton}></TouchableOpacity>
+          <TouchableOpacity style={styles.circleButton} onPress={() => darkTheme ? setDarkTheme(false) : setDarkTheme(true)}></TouchableOpacity>
         </View>
       </View>
+      
     </View>
   );
 };

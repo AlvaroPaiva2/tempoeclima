@@ -3,10 +3,11 @@ import { Feather } from '@expo/vector-icons';
 import { EvilIcons } from '@expo/vector-icons';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MainCard from './components/MainCard';
 import InfoCard from './components/InfoCard';
 import * as Location from 'expo-location';
+import getCurrentWeather from './api/ConsultaApi';
 
 export default function App() {
 
@@ -23,7 +24,7 @@ export default function App() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: darkTheme ? '#232634' : '#f2f2f2',
+      backgroundColor: darkTheme ? '#0e112c' : '#bdc08a',
       alignItems: 'center',
     },
     temperature: {
@@ -32,7 +33,7 @@ export default function App() {
       marginTop: 10,
     },
     temperatureText: {
-      color: darkTheme ? '#e0e0e0' : 'black',
+      color: darkTheme ? '#bdc08a' : 'black',
       fontSize: 50,
     },
     refreshButton: {
@@ -54,7 +55,7 @@ export default function App() {
       height: 230,
     },
     infoText: {
-      color: darkTheme ? '#e0e0e0' : 'white',
+      color: darkTheme ? '#bdc08a' : 'black',
       margin: 15,
       fontSize: 20,
       fontWeight: 'bold',
@@ -98,17 +99,23 @@ export default function App() {
       }else{
         let location = await Location.getCurrentPositionAsync({})
         await setLocationCoords(location.coords)
+        console.log(location.coords)
       }
   };
+
+  useEffect(() => {
+    getLocation()
+    getCurrentWeather(locationCoords)
+  }, [])
 
   return (
     <View style={styles.container}>
 
-      <TouchableOpacity style={styles.refreshButton}>
-        <EvilIcons name="refresh" size={30} color={darkTheme ? 'white' : 'black'} />
-      </TouchableOpacity>
+      <Pressable style={styles.refreshButton}>
+        <EvilIcons name="refresh" size={30} color={darkTheme ? '#bdc08a' : 'black'} />
+      </Pressable>
 
-      <Feather name="sun" style={{ marginTop: 55 }} size={40} color="orange" />
+      <Feather name="sun" style={{ marginTop: 55 }} size={40} color= {darkTheme ? '#bdc08a' : 'black'} />
 
       <View style={styles.temperature}>
         <Text style={styles.temperatureText}>{currentTemperature}</Text>

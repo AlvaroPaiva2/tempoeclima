@@ -8,6 +8,7 @@ import MainCard from './components/MainCard';
 import InfoCard from './components/InfoCard';
 import * as Location from 'expo-location';
 import getCurrentWeather from './api/ConsultaApi';
+import axios from 'axios';
 
 export default function App() {
 
@@ -24,7 +25,7 @@ export default function App() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: darkTheme ? '#0e112c' : '#bdc08a',
+      backgroundColor: darkTheme ? '#0e112c' : '#509bf4',
       alignItems: 'center',
     },
     temperature: {
@@ -88,19 +89,31 @@ export default function App() {
       height: 20,
       borderRadius: 50,
     },
+    text: {
+      color: darkTheme ? '#bdc08a' : 'black',
+      margin: 5,
+      marginLeft: 15,
+      fontSize: 18,
+    },
+    value: {
+      color: darkTheme ? '#bdc08a' : 'black',
+      margin: 5,
+      marginLeft: 15,
+      fontSize: 18,
+    }
 
   }
   );
 
-  async function getLocation(){
+  async function getLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync()
-      if (status !== 'granted'){
-        setErrorMsg('Sem permissão')
-      }else{
-        let location = await Location.getCurrentPositionAsync({})
-        await setLocationCoords(location.coords)
-        console.log(location.coords)
-      }
+    if (status !== 'granted') {
+      setErrorMsg('Sem permissão')
+    } else {
+      let location = await Location.getCurrentPositionAsync({})
+      await setLocationCoords(location.coords)
+      console.log(location.coords)
+    }
   };
 
   useEffect(() => {
@@ -115,7 +128,7 @@ export default function App() {
         <EvilIcons name="refresh" size={30} color={darkTheme ? '#bdc08a' : 'black'} />
       </Pressable>
 
-      <Feather name="sun" style={{ marginTop: 55 }} size={40} color= {darkTheme ? '#bdc08a' : 'black'} />
+      <Feather name={darkTheme ? 'moon' : 'sun'} style={{ marginTop: 55 }} size={40} color={darkTheme ? '#bdc08a' : 'black'} />
 
       <View style={styles.temperature}>
         <Text style={styles.temperatureText}>{currentTemperature}</Text>
@@ -133,19 +146,19 @@ export default function App() {
       <View style={styles.info}>
         <Text style={styles.infoText}>Informações adicionais</Text>
         <View style={styles.infoCards}>
-          <InfoCard title={'Vento'} value={wind + ' m/h'}></InfoCard>
-          <InfoCard title={'Umidade'} value={umidity + '%'}></InfoCard>
-          <InfoCard title={'Temp. Min'} value={tempMin + '°'}></InfoCard>
-          <InfoCard title={'Temp. Max'} value={tempMax + '°'}></InfoCard>
+          <InfoCard title={'Vento'} color= {darkTheme ? '#bdc08a' : 'black'} value={wind + ' m/h'}></InfoCard>
+          <InfoCard title={'Umidade'} color= {darkTheme ? '#bdc08a' : 'black'} value={umidity + '%'}></InfoCard>
+          <InfoCard title={'Temp. Min'} color= {darkTheme ? '#bdc08a' : 'black'} value={tempMin + '°'}></InfoCard>
+          <InfoCard title={'Temp. Max'} color= {darkTheme ? '#bdc08a' : 'black'} value={tempMax + '°'}></InfoCard>
         </View>
       </View>
-      
+
       <View style={styles.themeButton}>
         <View style={styles.squareButton}>
           <TouchableOpacity style={styles.circleButton} onPress={() => darkTheme ? setDarkTheme(false) : setDarkTheme(true)}></TouchableOpacity>
         </View>
       </View>
-      
+
     </View>
   );
 };

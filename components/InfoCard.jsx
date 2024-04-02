@@ -3,6 +3,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const InfoCard = (props) => {
 
+    const [darkTheme, setDarkTheme] = useState(true)
+
     const styles = StyleSheet.create({
         card: {
             alignItems: 'center',
@@ -10,7 +12,6 @@ const InfoCard = (props) => {
             minWidth: 150,
         },
         text: {
-            color: '#e8e8e8',
             margin: 5,
             marginLeft: 15, 
             fontSize: 18,
@@ -20,8 +21,8 @@ const InfoCard = (props) => {
 
     return (
         <View style={styles.card}>
-            <Text style={styles.text}>{props.title}</Text>
-            <Text style={[styles.text, {color: '#d3d3d3'}]}>{props.value}</Text>
+            <Text style={[styles.text, {color: darkTheme ? '#bdc08a' : 'black'}]}>{props.title}</Text>
+            <Text style={[styles.text]}>{props.value}</Text>
         </View>
     );
 }
